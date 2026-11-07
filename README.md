@@ -354,7 +354,7 @@ Ważne: projektujemy system informatyczny wspierający i symulujący pracę ATC,
 
 Podział
 
-Osoba 1 – Loty, linie lotnicze i wieża kontroli lotów
+**Osoba 1 – Loty, linie lotnicze i wieża kontroli lotów**
 
 
 
@@ -389,7 +389,9 @@ Do wykonania:
 - Interfejs JavaFX.
 - Implementacja modułu.
 - Testy i dokumentacja.
-Osoba 2 – Klient, wyszukiwanie lotów, rezerwacje i płatności
+
+- 
+**Osoba 2 – Klient, wyszukiwanie lotów, rezerwacje i płatności**
 
 
 
@@ -431,7 +433,9 @@ Do wykonania:
 - Implementacja modułu.
 - Integracja z modułem lotów.
 - Testy i dokumentacja.
-Osoba 3 – Online check-in, terminal i boarding
+
+- 
+**Osoba 3 – Online check-in, terminal i boarding**
 Szczególnie ważny wymóg prowadzącego
 
 
@@ -497,7 +501,9 @@ Do wykonania:
 - Implementacja modułu.
 - Integracja z rezerwacjami i lotami.
 - Testy i dokumentacja.
-Osoba 4 – Bagaż, transport i obsługa naziemna
+
+- 
+**Osoba 4 – Bagaż, transport i obsługa naziemna**
 
 
 
@@ -537,7 +543,9 @@ Do wykonania:
 - Implementacja modułu.
 - Integracja z lotami i odprawą.
 - Testy i dokumentacja.
-Osoba 5 – Personel, sprzątanie i infrastruktura techniczna
+
+- 
+**Osoba 5 – Personel, sprzątanie i infrastruktura techniczna**
 
 
 
@@ -577,7 +585,9 @@ Do wykonania:
 - Interfejs pracownika i kierownika.
 - Implementacja modułu.
 - Testy i dokumentacja.
-Osoba 6 – Bezpieczeństwo, ratownictwo i usługi lotniskowe
+
+- 
+**Osoba 6 – Bezpieczeństwo, ratownictwo i usługi lotniskowe**
 
 
 
@@ -617,9 +627,9 @@ Do wykonania:
 - Interfejsy pracowników.
 - Implementacja modułu.
 - Testy i dokumentacja.
-Osoba 7 – Ty, kierownik projektu
-Najmniejsze obciążenie wykonawcze
 
+
+**Szymon Kaletka - kierownik projektu**
 
 
 
