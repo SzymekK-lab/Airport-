@@ -688,3 +688,12 @@ Każda z osób 1–6 musi dostarczyć:
 - Implementację.
 - Testy.
 - Dokumentację techniczną.
+
+Osoba	Zakres	Języki i technologie
+1	Loty, linie lotnicze, ATC	Java, Spring Boot, SQL
+2	Klient, rezerwacje, płatności	Java, TypeScript, React, HTML, CSS, SQL
+3	Online check-in, terminal, boarding	Java, TypeScript, React, HTML, CSS, SQL
+4	Bagaż, transport, obsługa naziemna	Java, Spring Boot, SQL
+5	Personel, sprzątanie, infrastruktura techniczna	Java, Spring Boot, SQL
+6	Bezpieczeństwo, ratownictwo, usługi lotniskowe, infrastruktura techniczna systemu	Java, Spring Boot, SQL, Docker
+7 – kierownik	Dashboard dyrektora, zarządzanie projektem	TypeScript, React, HTML, CSS
