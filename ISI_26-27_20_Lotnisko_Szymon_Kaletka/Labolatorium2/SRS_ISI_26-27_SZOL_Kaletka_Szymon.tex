@@ -349,8 +349,8 @@ WF-055 & Pobieranie karty pokładowej & System musi umożliwiać pasażerowi pob
 \hline
 \rowcolor{lightblue}\textbf{ID} & \textbf{Nazwa} & \textbf{Opis} & \textbf{Aktor} & \textbf{Priorytet} & \textbf{Źródło i kryterium akceptacji}\\\hline
 \endhead
-WF-019 & Dodawanie lotu & System musi umożliwiać uprawnionemu kontrolerowi ruchu lotniczego utworzenie nowego lotu. & Kontroler ruchu lotniczego & Wysoki & \textbf{Źródło:} HU-10; UC18\par\textbf{Akceptacja:} Po podaniu wymaganych danych uprawniony użytkownik może zapisać nowy lot, któremu system nadaje unikalny identyfikator.\\\hline
-WF-020 & Edycja lotu & System musi umożliwiać uprawnionemu kontrolerowi ruchu lotniczego aktualizację informacji dotyczących zaplanowanego lotu. & Kontroler ruchu lotniczego & Wysoki & \textbf{Źródło:} HU-10; UC18\par\textbf{Akceptacja:} Zmiana danych lotu jest zapisywana, a system sprawdza poprawność danych i konflikty zasobów.\\\hline
+WF-019 & Dodawanie lotu & System musi umożliwiać uprawnionemu kontrolerowi ruchu lotniczego utworzenie nowego lotu. & Kontroler ruchu lotniczego & Wysoki & \textbf{Źródło:} HU-10; UC17–UC18\par\textbf{Akceptacja:} Po podaniu wymaganych danych uprawniony użytkownik może zapisać nowy lot, któremu system nadaje unikalny identyfikator.\\\hline
+WF-020 & Edycja lotu & System musi umożliwiać uprawnionemu kontrolerowi ruchu lotniczego aktualizację informacji dotyczących zaplanowanego lotu. & Kontroler ruchu lotniczego & Wysoki & \textbf{Źródło:} HU-10; UC17–UC18\par\textbf{Akceptacja:} Zmiana danych lotu jest zapisywana, a system sprawdza poprawność danych i konflikty zasobów.\\\hline
 WF-021 & Aktualizacja statusu lotu & System musi umożliwiać uprawnionemu użytkownikowi zmianę statusu lotu. & Kontroler ruchu lotniczego & Wysoki & \textbf{Źródło:} HU-04; HU-12; HU-13; PU-04; UC4, UC24–UC25\par\textbf{Akceptacja:} Zmiana statusu jest zapisywana z datą i użytkownikiem, a nowy status jest widoczny dla uprawnionych odbiorców.\\\hline
 WF-022 & Przypisywanie samolotu & System musi umożliwiać przypisanie samolotu do lotu po sprawdzeniu dostępności. & Kontroler ruchu lotniczego & Wysoki & \textbf{Źródło:} HU-11; UC19\par\textbf{Akceptacja:} System umożliwia przypisanie dostępnego samolotu i blokuje przypisanie powodujące konflikt czasowy.\\\hline
 WF-023 & Harmonogram lotów & System musi prezentować harmonogram przylotów i odlotów odpowiednio do uprawnień użytkownika. & Pasażer, kontroler ruchu lotniczego & Wysoki & \textbf{Źródło:} HU-04; HU-10; HU-12; UC4, UC17\par\textbf{Akceptacja:} Użytkownik może wyświetlić loty według daty i kierunku wraz z aktualnym statusem oraz planowanymi godzinami.\\\hline
@@ -423,7 +423,7 @@ WF-039 & Przeglądanie dziennika zdarzeń & System musi umożliwiać administrat
 WF-047 & Monitorowanie bezpieczeństwa lotniska & System musi umożliwiać pracownikowi bezpieczeństwa przeglądanie informacji o zdarzeniach i zgłoszeniach dotyczących bezpieczeństwa lotniska. & Pracownik bezpieczeństwa i ratownictwa & Wysoki & \textbf{Źródło:} HU-26; PU-05; UC45\par\textbf{Akceptacja:} Pracownik może wyświetlić listę zdarzeń, filtrować je według statusu lub kategorii i przejść do szczegółów.\\\hline
 WF-048 & Zarządzanie konfiguracją systemu & System musi umożliwiać administratorowi przeglądanie i modyfikowanie ustawień konfiguracyjnych zgodnie z uprawnieniami. & Administrator systemu & Wysoki & \textbf{Źródło:} HU-29; UC50\par\textbf{Akceptacja:} Administrator może zmienić dozwolone ustawienia, a system zapisuje zmianę i identyfikator wykonującego ją użytkownika.\\\hline
 WF-049 & Zarządzanie finansami i rozliczeniami & System musi umożliwiać pracownikowi administracji przeglądanie i analizowanie danych dotyczących płatności, przychodów i rozliczeń. & Pracownik administracji & Średni & \textbf{Źródło:} HU-30; UC51\par\textbf{Akceptacja:} Pracownik może wyświetlić zestawienie transakcji i danych rozliczeniowych za wybrany okres.\\\hline
-WF-050 & Wysyłanie powiadomień & System musi przekazywać komunikaty do zewnętrznego systemu powiadomień w celu informowania odbiorców o istotnych zmianach. & System obsługi lotniska; zewnętrzny system powiadomień & Wysoki & \textbf{Źródło:} HU-13; HU-31; PU-04; UC24–UC25; UC54\par\textbf{Akceptacja:} System przekazuje komunikat do usługi zewnętrznej, a przy błędzie zapisuje niepowodzenie i umożliwia ponowienie.\\\hline
+WF-050 & Wysyłanie powiadomień & System musi przekazywać komunikaty do zewnętrznego systemu powiadomień w celu informowania odbiorców o istotnych zmianach. & System obsługi lotniska; zewnętrzny system powiadomień & Wysoki & \textbf{Źródło:} HU-13; HU-31; PU-04; UC54\par\textbf{Akceptacja:} System przekazuje komunikat do usługi zewnętrznej, a przy błędzie zapisuje niepowodzenie i umożliwia ponowienie.\\\hline
 \end{longtable}
 \normalsize
 
@@ -538,7 +538,7 @@ System składa się z pięciu głównych obszarów funkcjonalnych, które wspó�
 \textbf{Status zadania pracownika:} oczekujące, przydzielone, w realizacji, zakończone, zablokowane.
 
 % ================= 6. INDEKS =================
-\chapter{Indeks wymagań}
+\chapter{Indeks wymagań i terminów}
 
 \section{Indeks wymagań funkcjonalnych}
 \begin{longtable}{|p{5cm}|p{8cm}|}
@@ -551,7 +551,7 @@ Odprawa pasażerów & WF-015 -- WF-018, WF-055\\\hline
 Zarządzanie lotami i zasobami lotniczymi & WF-019 -- WF-024, WF-040, WF-056 -- WF-059\\\hline
 Terminal i bagaż & WF-025 -- WF-029, WF-060 -- WF-062\\\hline
 Obsługa naziemna i personel & WF-030 -- WF-034, WF-041 -- WF-046\\\hline
-Bezpieczeństwo i administracja & WF-035 -- WF-039, WF-047 -- WF-050, WF-063\\\hline
+Bezpieczeństwo i administracja & WF-035 -- WF-039, WF-047 -- WF-050\\\hline
 \end{longtable}
 
 \section{Indeks wymagań niefunkcjonalnych}
@@ -565,6 +565,26 @@ Użyteczność & WNF-016 -- WNF-018\\\hline
 Utrzymywalność & WNF-019 -- WNF-021\\\hline
 Przenośność i kompatybilność & WNF-022 -- WNF-023\\\hline
 Skalowalność & WNF-024 -- WNF-025\\\hline
+\end{longtable}
+
+
+\section{Indeks terminów}
+Terminy zestawiono alfabetycznie. Ich definicje są zgodne ze słownikiem pojęć
+przedstawionym w rozdziale pierwszym oraz z terminologią stosowaną w wymaganiach.
+
+\begin{longtable}{|p{4.2cm}|p{9.3cm}|}
+\caption{Alfabetyczny indeks terminów}\label{tab:indeks-terminow}\\\hline
+\rowcolor{lightblue}\textbf{Termin} & \textbf{Opis}\\\hline
+Administrator & Osoba uprawniona do zarządzania użytkownikami, rolami i konfiguracją systemu.\\\hline
+Bagaż & Rzeczy przewożone przez pasażera, rejestrowane i obsługiwane w procesach lotniskowych.\\\hline
+Bramka & Wyznaczone miejsce, przez które pasażerowie wchodzą na pokład samolotu.\\\hline
+Karta pokładowa & Dokument potwierdzający uprawnienie pasażera do wejścia na pokład samolotu.\\\hline
+Odprawa & Proces potwierdzenia obecności pasażera na danym locie i przygotowania go do wejścia na pokład.\\\hline
+Pasażer & Osoba korzystająca z usług lotniska i realizująca podróż lotniczą.\\\hline
+RBAC & Mechanizm kontroli dostępu oparty na rolach przypisanych użytkownikom.\\\hline
+Rezerwacja & Zapis dotyczący miejsca pasażera w wybranym połączeniu lotniczym.\\\hline
+System płatności & Zewnętrzny system obsługujący autoryzację i realizację płatności za usługi.\\\hline
+UML & Unified Modeling Language -- język modelowania systemów.\\\hline
 \end{longtable}
 
 
