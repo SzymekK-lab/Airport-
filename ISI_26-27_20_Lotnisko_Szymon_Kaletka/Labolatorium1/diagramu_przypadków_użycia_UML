@@ -1,0 +1,241 @@
+
+@startuml
+left to right direction
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam usecase {
+    BackgroundColor #EAF2F8
+    BorderColor #2874A6
+    ArrowColor #34495E
+}
+skinparam rectangle {
+    BorderColor #34495E
+}
+
+title Diagram przypadków użycia - System obsługi lotniska
+
+' =========================
+' AKTORZY
+' =========================
+
+actor "Pasażer" as Passenger
+actor "Pracownik odprawy" as Checkin
+actor "Pracownik obsługi\nnaziemnej" as Ground
+actor "Kontroler ruchu\nlotniczego" as ATC
+actor "Pracownik terminala" as Terminal
+actor "Pracownik techniczny" as Technician
+actor "Pracownik bezpieczeństwa\ni ratownictwa" as Security
+actor "Pracownik administracji" as Office
+actor "Administrator systemu" as Admin
+
+actor "System płatności" as Payment
+actor "System powiadomień" as Notification
+
+' =========================
+' SYSTEM LOTNISKA
+' =========================
+
+rectangle "ZINTEGROWANY SYSTEM OBSŁUGI LOTNISKA" {
+
+    package "Portal pasażera i rezerwacje" {
+
+        usecase "Utwórz konto" as UC1
+        usecase "Zaloguj się" as UC2
+        usecase "Wyszukaj lot" as UC3
+        usecase "Sprawdź status lotu" as UC4
+        usecase "Zarezerwuj bilet" as UC5
+        usecase "Kup bilet" as UC6
+        usecase "Opłać rezerwację" as UC7
+        usecase "Zarządzaj rezerwacją" as UC8
+        usecase "Anuluj rezerwację" as UC9
+        usecase "Wykonaj odprawę online" as UC10
+        usecase "Wybierz miejsce w samolocie" as UC11
+        usecase "Wygeneruj kartę pokładową" as UC12
+        usecase "Pobierz kartę pokładową\n(PDF / QR)" as UC13
+        usecase "Zgłoś bagaż" as UC14
+        usecase "Zamów usługę dodatkową" as UC15
+        usecase "Złóż reklamację" as UC16
+    }
+
+    package "Zarządzanie lotami i kontrola ruchu" {
+
+        usecase "Zarządzaj rozkładem lotów" as UC17
+        usecase "Dodaj i edytuj lot" as UC18
+        usecase "Przypisz samolot do lotu" as UC19
+        usecase "Przydziel pas startowy" as UC20
+        usecase "Przydziel stanowisko postojowe" as UC21
+        usecase "Monitoruj ruch lotniczy" as UC22
+        usecase "Zatwierdź start i lądowanie" as UC23
+        usecase "Aktualizuj status lotu" as UC24
+        usecase "Obsłuż opóźnienie lub odwołanie" as UC25
+        usecase "Zarządzaj liniami lotniczymi" as UC26
+    }
+
+    package "Obsługa terminala i bagażu" {
+
+        usecase "Przeprowadź odprawę pasażera" as UC27
+        usecase "Nadaj bagaż rejestrowany" as UC28
+        usecase "Wydrukuj etykietę bagażową" as UC29
+        usecase "Przydziel bramkę" as UC30
+        usecase "Zarządzaj bramkami" as UC31
+        usecase "Kontroluj boarding" as UC32
+        usecase "Zarządzaj przepływem pasażerów" as UC33
+        usecase "Monitoruj transport bagażu" as UC34
+        usecase "Obsłuż zagubiony bagaż" as UC35
+    }
+
+    package "Obsługa naziemna i personel" {
+
+        usecase "Przygotuj samolot do lotu" as UC36
+        usecase "Obsłuż samolot po lądowaniu" as UC37
+        usecase "Załaduj i rozładuj bagaż" as UC38
+        usecase "Zarządzaj personelem" as UC39
+        usecase "Przydziel zadania pracownikom" as UC40
+        usecase "Zaplanuj sprzątanie" as UC41
+        usecase "Zgłoś usterkę infrastruktury" as UC42
+        usecase "Przeprowadź przegląd techniczny" as UC43
+        usecase "Zarządzaj wyposażeniem" as UC44
+    }
+
+    package "Bezpieczeństwo i administracja" {
+
+        usecase "Monitoruj bezpieczeństwo lotniska" as UC45
+        usecase "Obsłuż sytuację awaryjną" as UC46
+        usecase "Zarejestruj incydent" as UC47
+        usecase "Zarządzaj użytkownikami" as UC48
+        usecase "Zarządzaj rolami i uprawnieniami" as UC49
+        usecase "Zarządzaj konfiguracją systemu" as UC50
+        usecase "Zarządzaj finansami i rozliczeniami" as UC51
+        usecase "Generuj raporty" as UC52
+        usecase "Przeglądaj dziennik zdarzeń" as UC53
+        usecase "Wysyłaj powiadomienia" as UC54
+    }
+}
+
+' =========================
+' POWIĄZANIA PASAŻERA
+' =========================
+
+Passenger --> UC1
+Passenger --> UC2
+Passenger --> UC3
+Passenger --> UC4
+Passenger --> UC5
+Passenger --> UC8
+Passenger --> UC10
+Passenger --> UC14
+Passenger --> UC15
+Passenger --> UC16
+
+UC5 ..> UC6 : <<include>>
+UC6 ..> UC7 : <<include>>
+UC10 ..> UC11 : <<include>>
+UC10 ..> UC12 : <<include>>
+UC12 ..> UC13 : <<include>>
+UC9 ..> UC8 : <<extend>>
+
+Payment --> UC7
+Notification --> UC54
+
+' =========================
+' POWIĄZANIA PRACOWNIKA ODPRAWY
+' =========================
+
+Checkin --> UC27
+Checkin --> UC28
+Checkin --> UC29
+Checkin --> UC32
+Checkin --> UC35
+
+UC28 ..> UC29 : <<include>>
+
+' =========================
+' POWIĄZANIA OBSŁUGI NAZIEMNEJ
+' =========================
+
+Ground --> UC36
+Ground --> UC37
+Ground --> UC38
+Ground --> UC34
+Ground --> UC40
+
+UC36 ..> UC38 : <<include>>
+UC37 ..> UC38 : <<include>>
+
+' =========================
+' POWIĄZANIA KONTROLI RUCHU
+' =========================
+
+ATC --> UC17
+ATC --> UC18
+ATC --> UC19
+ATC --> UC20
+ATC --> UC21
+ATC --> UC22
+ATC --> UC23
+ATC --> UC24
+ATC --> UC25
+ATC --> UC26
+
+UC25 ..> UC24 : <<include>>
+
+' =========================
+' POWIĄZANIA TERMINALA
+' =========================
+
+Terminal --> UC30
+Terminal --> UC31
+Terminal --> UC32
+Terminal --> UC33
+Terminal --> UC34
+
+' =========================
+' POWIĄZANIA TECHNICZNE
+' =========================
+
+Technician --> UC42
+Technician --> UC43
+Technician --> UC44
+Technician --> UC41
+
+' =========================
+' POWIĄZANIA BEZPIECZEŃSTWA
+' =========================
+
+Security --> UC45
+Security --> UC46
+Security --> UC47
+
+UC46 ..> UC47 : <<include>>
+
+' =========================
+' ADMINISTRACJA
+' =========================
+
+Office --> UC39
+Office --> UC40
+Office --> UC41
+Office --> UC51
+Office --> UC52
+Office --> UC16
+
+Admin --> UC48
+Admin --> UC49
+Admin --> UC50
+Admin --> UC52
+Admin --> UC53
+
+UC48 ..> UC49 : <<include>>
+
+' =========================
+' POWIADOMIENIA
+' =========================
+
+UC24 ..> UC54 : <<include>>
+UC25 ..> UC54 : <<include>>
+UC54 --> Notification
+
+@enduml
