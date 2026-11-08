@@ -6,11 +6,13 @@ skinparam backgroundColor white
 skinparam shadowing false
 skinparam packageStyle rectangle
 skinparam actorStyle awesome
+
 skinparam usecase {
     BackgroundColor #EAF2F8
     BorderColor #2874A6
     ArrowColor #34495E
 }
+
 skinparam rectangle {
     BorderColor #34495E
 }
@@ -85,6 +87,9 @@ rectangle "ZINTEGROWANY SYSTEM OBSŁUGI LOTNISKA" {
         usecase "Zarządzaj przepływem pasażerów" as UC33
         usecase "Monitoruj transport bagażu" as UC34
         usecase "Obsłuż zagubiony bagaż" as UC35
+
+        ' Nowy przypadek użycia
+        usecase "Zarządzaj stanowiskami\nodprawy" as UC55
     }
 
     package "Obsługa naziemna i personel" {
@@ -112,6 +117,10 @@ rectangle "ZINTEGROWANY SYSTEM OBSŁUGI LOTNISKA" {
         usecase "Generuj raporty" as UC52
         usecase "Przeglądaj dziennik zdarzeń" as UC53
         usecase "Wysyłaj powiadomienia" as UC54
+
+        ' Nowe funkcje wspólne dla użytkowników systemu
+        usecase "Wyloguj się" as UC56
+        usecase "Zarządzaj własnym kontem" as UC57
     }
 }
 
@@ -138,7 +147,6 @@ UC12 ..> UC13 : <<include>>
 UC9 ..> UC8 : <<extend>>
 
 Payment --> UC7
-Notification --> UC54
 
 ' =========================
 ' POWIĄZANIA PRACOWNIKA ODPRAWY
@@ -191,6 +199,7 @@ Terminal --> UC31
 Terminal --> UC32
 Terminal --> UC33
 Terminal --> UC34
+Terminal --> UC55
 
 ' =========================
 ' POWIĄZANIA TECHNICZNE
@@ -231,11 +240,42 @@ Admin --> UC53
 UC48 ..> UC49 : <<include>>
 
 ' =========================
-' POWIADOMIENIA
+' POWIĄZANIA SYSTEMU POWIADOMIEŃ
 ' =========================
+
+Notification --> UC54
 
 UC24 ..> UC54 : <<include>>
 UC25 ..> UC54 : <<include>>
-UC54 --> Notification
+
+' =========================
+' NOWE POWIĄZANIA – UC56
+' WYLOGOWANIE
+' =========================
+
+Passenger --> UC56
+Checkin --> UC56
+Ground --> UC56
+ATC --> UC56
+Terminal --> UC56
+Technician --> UC56
+Security --> UC56
+Office --> UC56
+Admin --> UC56
+
+' =========================
+' NOWE POWIĄZANIA – UC57
+' ZARZĄDZANIE WŁASNYM KONTEM
+' =========================
+
+Passenger --> UC57
+Checkin --> UC57
+Ground --> UC57
+ATC --> UC57
+Terminal --> UC57
+Technician --> UC57
+Security --> UC57
+Office --> UC57
+Admin --> UC57
 
 @enduml
