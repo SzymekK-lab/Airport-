@@ -524,7 +524,7 @@ Dodatkowo osoba 6 koordynuje uzgodnienia dotyczące wspólnej infrastruktury apl
 
 ---
 
-## Osoba 7 – Kierownik projektu
+## Szymon Kaletka – Kierownik projektu
 
 **Główny zakres odpowiedzialności:** organizacja pracy zespołu, kontrola postępów, spójność projektu oraz przygotowanie głównego panelu zarządzania lotniskiem.
 
