@@ -5,7 +5,7 @@
 ![Status](https://img.shields.io/badge/Status-In%20Development-orange)
 ![Java](https://img.shields.io/badge/Java-21%2B-red)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-Backend-brightgreen)
-!(https://img.shields.io/badge/React-Frontend-blue)[React]
+![React](https://img.shields.io/badge/React-Frontend-blue)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
 ![Team](https://img.shields.io/badge/Team-7%20Members-purple)
 
