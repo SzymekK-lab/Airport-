@@ -1,0 +1,623 @@
+\documentclass[12pt,a4paper,oneside]{report}
+
+% --- Kodowanie i język ---
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% --- Układ strony i formatowanie ---
+\usepackage[a4paper, left=2.7cm, right=2.2cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.2cm}
+\setlist[enumerate]{leftmargin=1.2cm}
+
+% --- Tabele, grafika i kolory ---
+\usepackage[table]{xcolor}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta}
+
+% --- Nagłówki, stopki i odnośniki ---
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{navy}{RGB}{25,48,78}
+\definecolor{lightblue}{RGB}{232,239,247}
+\definecolor{lightgray}{RGB}{245,246,248}
+
+\titleformat{\chapter}[display]
+  {\normalfont\bfseries\color{navy}}
+  {\filright\Large\chaptername\ \thechapter}
+  {1ex}
+  {\titlerule\vspace{1ex}\Huge}
+  [\vspace{1ex}\titlerule]
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{navy}}
+  {\thesection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Zintegrowany System Obsługi Lotniska}
+\fancyhead[R]{Specyfikacja SRS}
+\fancyfoot[L]{Laboratorium 2}
+\fancyfoot[R]{Strona \thepage\ z \pageref{LastPage}}
+\setlength{\headheight}{15pt}
+
+\renewcommand{\arraystretch}{1.25}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\req}[5]{%
+\textbf{#1} & \textbf{#2} & #3 & #4 & #5\\\hline
+}
+\newcommand{\priority}[1]{\textbf{#1}}
+
+\begin{document}
+
+% ================= STRONA TYTUŁOWA =================
+\begin{titlepage}
+    \centering
+    \vspace*{1.5cm}
+    {\Large \textbf{DOKUMENTACJA PROJEKTOWA}\par}
+    \vspace{2.0cm}
+    {\Huge\bfseries\color{navy} ZINTEGROWANY SYSTEM\\[0.3cm] OBSŁUGI LOTNISKA\par}
+    \vspace{1.0cm}
+    {\LARGE Specyfikacja wymagań systemowych\par}
+    \vspace{0.4cm}
+    {\large Software Requirements Specification (SRS)\par}
+    \vfill
+    \begin{tabular}{rl}
+        \textbf{Przedmiot:} & Laboratorium 2 -- Specyfikacja przypadków użycia i SRS\\
+        \textbf{Wersja dokumentu:} & 1.1 -- wersja uzupełniona\\
+        \textbf{Data:} & 8 listopada 2026 r.\\
+        \textbf{Prowadzący:} & Dariusz Dorota\\
+        \textbf{Kierownik zespołu:} & Szymon Kaletka\\
+        \textbf{Członkowie zespołu:} & Kacper Putyra, Daniel Ziobroń,\\
+        & Kacper Madziar, Karol Wójcik,\\
+        & Paweł Śmietana, Radosław Podgórski\\
+    \end{tabular}
+    \vfill
+    {\large 2026\par}
+\end{titlepage}
+
+\pagenumbering{Roman}
+\tableofcontents
+\listoftables
+\clearpage
+\pagenumbering{arabic}
+
+% ================= 1. WPROWADZENIE =================
+\chapter{Wprowadzenie}
+
+\section{Cel dokumentu}
+Celem niniejszego dokumentu jest przedstawienie szczegółowej specyfikacji wymagań systemowych dla projektu „Zintegrowany System Obsługi Lotniska”. Dokument określa funkcjonalności, ograniczenia, wymagania jakościowe oraz zasady działania projektowanego systemu. Stanowi podstawę do dalszych etapów realizacji projektu, w szczególności projektowania architektury, implementacji modułów oraz przygotowania testów systemowych i akceptacyjnych.
+
+Dokument jest przeznaczony dla członków zespołu projektowego, analityków systemowych, projektantów, programistów, testerów, kierownika projektu oraz osób odpowiedzialnych za ocenę i odbiór systemu.
+
+\section{Zakres produktu}
+Zintegrowany System Obsługi Lotniska jest systemem informatycznym przeznaczonym do wspomagania i koordynowania procesów operacyjnych zachodzących na terenie lotniska. Głównym celem systemu jest centralizacja informacji dotyczących pasażerów, lotów, rezerwacji, odprawy, bagażu, infrastruktury terminalowej, obsługi naziemnej oraz bezpieczeństwa.
+
+\subsection*{Główne cele systemu}
+\begin{enumerate}
+    \item Usprawnienie obsługi pasażerów.
+    \item Umożliwienie wyszukiwania lotów oraz zarządzania rezerwacjami.
+    \item Automatyzacja procesu odprawy pasażerskiej.
+    \item Zapewnienie centralnego zarządzania informacjami o lotach.
+    \item Ułatwienie koordynacji pracy personelu lotniskowego.
+    \item Zarządzanie stanowiskami odprawy, bramkami i zasobami terminala.
+    \item Wspomaganie obsługi bagażu.
+    \item Usprawnienie komunikacji pomiędzy działami lotniska.
+    \item Zapewnienie monitorowania zdarzeń i sytuacji awaryjnych.
+    \item Zwiększenie bezpieczeństwa informacji i operacji realizowanych w systemie.
+\end{enumerate}
+
+\subsection*{Granice systemu}
+System będzie wspomagał obsługę operacyjną lotniska, ale nie będzie zastępował certyfikowanych systemów kontroli ruchu lotniczego ani urządzeń nawigacyjnych. Decyzje dotyczące rzeczywistego prowadzenia statków powietrznych, separacji samolotów i bezpieczeństwa ruchu lotniczego pozostają w gestii uprawnionych służb i operatorów. System może udostępniać uprawnionym pracownikom informacje operacyjne oraz narzędzia wspomagające zarządzanie harmonogramami i zasobami lotniska.
+
+\section{Definicje, akronimy i skróty}
+Najważniejsze terminy stosowane w dokumencie zestawiono w tabeli \ref{tab:slownik}.
+\begin{longtable}{|p{3.2cm}|p{10.5cm}|}
+\caption{Definicje, akronimy i skróty}\label{tab:slownik}\\\hline
+\rowcolor{lightblue}\textbf{Pojęcie} & \textbf{Definicja}\\\hline
+SRS & Software Requirements Specification -- specyfikacja wymagań systemowych.\\\hline
+UML & Unified Modeling Language -- język modelowania systemów.\\\hline
+PU & Przypadek użycia.\\\hline
+WF & Wymaganie funkcjonalne.\\\hline
+WNF & Wymaganie niefunkcjonalne.\\\hline
+GUI & Graficzny interfejs użytkownika.\\\hline
+RBAC & Role-Based Access Control -- kontrola dostępu oparta na rolach.\\\hline
+Administrator & Osoba zarządzająca konfiguracją i użytkownikami systemu.\\\hline
+Pasażer & Osoba korzystająca z usług lotniska.\\\hline
+Odprawa & Proces potwierdzenia obecności pasażera na danym locie.\\\hline
+Karta pokładowa & Dokument uprawniający pasażera do wejścia na pokład samolotu.\\\hline
+Bramka & Wyznaczone miejsce wejścia pasażerów na pokład.\\\hline
+Lot & Zaplanowane lub realizowane połączenie lotnicze.\\\hline
+Zasób lotniskowy & Element infrastruktury, np. bramka lub stanowisko odprawy.\\\hline
+Obsługa naziemna & Czynności wykonywane na rzecz samolotu i pasażerów na terenie lotniska.\\\hline
+\end{longtable}
+
+\section{Odwołania do literatury}
+Wymagania i sposób organizacji niniejszej specyfikacji opracowano z uwzględnieniem standardu inżynierii wymagań ISO/IEC/IEEE 29148 \cite{iso29148}. Model jakości produktu odniesiono do normy ISO/IEC 25010 \cite{iso25010}. Do opisu struktury i zachowania systemu wykorzystywana jest notacja UML \cite{uml}. Przy formułowaniu wymagań bezpieczeństwa uwzględniono zalecenia OWASP ASVS \cite{owasp} oraz przepisy RODO \cite{rodo}. Dokument jest również powiązany z dokumentacją i diagramem przypadków użycia przygotowanymi podczas Laboratorium 1.
+
+\section{Omówienie dokumentu}
+Rozdział pierwszy przedstawia cel, zakres i terminologię projektu. Rozdział drugi opisuje ogólną charakterystykę produktu, jego otoczenie oraz użytkowników. Rozdział trzeci zawiera wymagania funkcjonalne określające operacje realizowane przez system. Rozdział czwarty przedstawia wymagania niefunkcjonalne dotyczące jakości, bezpieczeństwa i wydajności. Rozdział piąty zawiera dodatki i materiały uzupełniające, natomiast rozdział szósty obejmuje indeks identyfikatorów wymagań.
+
+% ================= 2. OPIS PRODUKTU =================
+\chapter{Ogólny opis produktu}
+
+\section{Kontekst funkcjonowania}
+System będzie centralnym środowiskiem informatycznym wspomagającym funkcjonowanie wybranych obszarów lotniska. Będą z niego korzystać pasażerowie oraz pracownicy różnych jednostek organizacyjnych. Poszczególne grupy użytkowników będą korzystały z odpowiednich modułów w zależności od pełnionej funkcji i przyznanych uprawnień.
+
+Ogólny podział rozwiązania na główne moduły przedstawiono na rysunku \ref{fig:moduly-systemu}.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        module/.style={draw=navy, rounded corners, fill=lightblue, align=center,
+                       text width=3.0cm, minimum height=0.9cm, font=\small},
+        core/.style={draw=navy, rounded corners, fill=navy, text=white,
+                     align=center, text width=3.3cm, minimum height=1.1cm,
+                     font=\small\bfseries},
+        link/.style={-{Latex[length=2mm]}, thick, draw=navy}
+    ]
+        \node[core] (core) {Zintegrowany System\\Obsługi Lotniska};
+        \node[module, above left=1.0cm and 0.8cm of core] (pass) {Portal pasażera};
+        \node[module, above right=1.0cm and 0.8cm of core] (flight) {Zarządzanie lotami};
+        \node[module, below left=1.0cm and 0.8cm of core] (terminal) {Terminal i obsługa bagażu};
+        \node[module, below right=1.0cm and 0.8cm of core] (ground) {Obsługa naziemna i personel};
+        \node[module, below=1.8cm of core] (security) {Bezpieczeństwo i administracja};
+        \draw[link] (pass) -- (core);
+        \draw[link] (flight) -- (core);
+        \draw[link] (terminal) -- (core);
+        \draw[link] (ground) -- (core);
+        \draw[link] (core) -- (security);
+    \end{tikzpicture}
+    \caption{Główne moduły funkcjonalne Zintegrowanego Systemu Obsługi Lotniska}
+    \label{fig:moduly-systemu}
+\end{figure}
+
+\subsection*{Główne moduły systemu}
+\begin{enumerate}
+    \item \textbf{Portal pasażera} -- rejestracja, logowanie, zarządzanie kontem, wyszukiwanie lotów, rezerwacje, płatności, odprawa online i karty pokładowe.
+    \item \textbf{Zarządzanie lotami} -- tworzenie i edycja lotów, harmonogramy, przypisywanie samolotów, aktualizacja statusów oraz kontrola dostępności zasobów.
+    \item \textbf{Terminal i obsługa bagażu} -- stanowiska odprawy, bramki, rejestrowanie bagażu, monitorowanie jego statusu i obsługa wejścia na pokład.
+    \item \textbf{Obsługa naziemna i personel} -- zarządzanie pracownikami, przydzielanie zadań, planowanie czynności i monitorowanie realizacji.
+    \item \textbf{Bezpieczeństwo i administracja} -- konta, role, kontrola dostępu, rejestrowanie zdarzeń, incydenty i raporty.
+\end{enumerate}
+
+\section{Charakterystyka użytkowników}
+Zestawienie ról, charakterystyki i podstawowych uprawnień przedstawiono w tabeli \ref{tab:aktorzy}.
+\begin{longtable}{|p{3.6cm}|p{5.1cm}|p{5cm}|}
+\caption{Charakterystyka użytkowników systemu}\label{tab:aktorzy}\\\hline
+\rowcolor{lightblue}\textbf{Aktor} & \textbf{Charakterystyka} & \textbf{Główne uprawnienia}\\\hline
+Pasażer & Osoba korzystająca z usług lotniska. & Rezerwacje, płatności, odprawa, przeglądanie lotów.\\\hline
+Pracownik odprawy & Osoba obsługująca pasażerów. & Weryfikacja rezerwacji, odprawa, obsługa bagażu.\\\hline
+Pracownik obsługi naziemnej & Osoba realizująca zadania operacyjne. & Przeglądanie i realizacja przydzielonych zadań.\\\hline
+Kontroler ruchu lotniczego & Uprawniony pracownik nadzorujący operacje w zakresie objętym systemem. & Przeglądanie i aktualizacja informacji operacyjnych.\\\hline
+Pracownik terminala & Osoba obsługująca infrastrukturę terminalową. & Zarządzanie bramkami i stanowiskami.\\\hline
+Pracownik techniczny & Osoba odpowiedzialna za stan techniczny zasobów. & Rejestrowanie usterek i aktualizacja statusów technicznych.\\\hline
+Pracownik bezpieczeństwa & Osoba odpowiedzialna za obsługę incydentów. & Rejestrowanie i monitorowanie zdarzeń.\\\hline
+Pracownik administracji & Osoba realizująca zadania administracyjne. & Raporty i zarządzanie wybranymi danymi.\\\hline
+Administrator systemu & Osoba zarządzająca systemem. & Konta, role, konfiguracja i monitoring.\\\hline
+System płatności & Zewnętrzny system obsługujący transakcje. & Autoryzacja i potwierdzanie płatności.\\\hline
+System powiadomień & Zewnętrzna usługa komunikacyjna. & Dostarczanie powiadomień użytkownikom.\\\hline
+\end{longtable}
+
+Każdy użytkownik posiadający konto pracownicze będzie korzystał z funkcji odpowiadających jego roli. Dostęp do danych i operacji będzie ograniczony zgodnie z przyznanymi uprawnieniami.
+
+\section{Główne funkcje produktu}
+Do najważniejszych funkcji systemu należą:
+\begin{enumerate}
+    \item rejestracja, logowanie i zarządzanie kontami użytkowników;
+    \item wyszukiwanie i przeglądanie dostępnych lotów;
+    \item zarządzanie rezerwacjami pasażerów;
+    \item obsługa płatności za rezerwacje;
+    \item realizacja odprawy online i stanowiskowej;
+    \item generowanie oraz udostępnianie kart pokładowych;
+    \item zarządzanie harmonogramami i statusami lotów;
+    \item przypisywanie samolotów do lotów;
+    \item zarządzanie bramkami i stanowiskami odprawy;
+    \item rejestrowanie i monitorowanie bagażu;
+    \item przydzielanie zadań pracownikom obsługi naziemnej;
+    \item monitorowanie realizacji operacji lotniskowych;
+    \item rejestrowanie incydentów i usterek;
+    \item zarządzanie rolami i uprawnieniami;
+    \item generowanie raportów operacyjnych i administracyjnych.
+\end{enumerate}
+
+\section{Ograniczenia}
+\begin{itemize}
+    \item Dostęp do funkcji administracyjnych wymaga odpowiednich uprawnień.
+    \item Operacje związane z danymi pasażerów podlegają zasadom ochrony danych osobowych.
+    \item System wymaga dostępu do infrastruktury sieciowej.
+    \item Obsługa płatności zależy od dostępności zewnętrznego systemu płatniczego.
+    \item Wysyłanie powiadomień zależy od dostępności usługi zewnętrznej.
+    \item System nie zastępuje certyfikowanych systemów kontroli ruchu lotniczego.
+    \item Dostępność funkcji zależy od roli użytkownika.
+    \item Operacje dotyczące zasobów lotniskowych wymagają sprawdzenia ich dostępności i poprawności przypisania.
+\end{itemize}
+
+\section{Założenia i zależności}
+\begin{enumerate}
+    \item Użytkownicy pracowniczy posiadają indywidualne konta.
+    \item Pasażer może korzystać z wybranych funkcji bez logowania, natomiast rezerwacja i odprawa wymagają identyfikacji.
+    \item Dane o lotach są wprowadzane lub aktualizowane przez uprawnionych pracowników.
+    \item System posiada centralną bazę danych.
+    \item Poszczególne moduły korzystają ze wspólnego źródła danych.
+    \item Zewnętrzny system płatności odpowiada za autoryzację transakcji.
+    \item System powiadomień odpowiada za dostarczanie komunikatów.
+    \item Każda operacja wymagająca uprawnień podlega weryfikacji.
+    \item Istotne operacje administracyjne i operacyjne mogą być rejestrowane w dzienniku zdarzeń.
+    \item Dane testowe będą wykorzystywane podczas demonstracji i testowania systemu.
+\end{enumerate}
+
+% ================= 3. WYMAGANIA FUNKCJONALNE =================
+\chapter{Wymagania funkcjonalne}
+
+Wymagania funkcjonalne opisują konkretne operacje, które system musi umożliwiać. Każde wymaganie posiada unikalny identyfikator, nazwę, opis, aktora, priorytet, źródło oraz indywidualne kryterium akceptacji. Priorytet „Wysoki” oznacza funkcjonalność niezbędną do podstawowego działania systemu, „Średni” -- funkcjonalność istotną, ale niewarunkującą podstawowego działania, a „Niski” -- funkcjonalność dodatkową.
+
+\section{Zarządzanie użytkownikami}
+\small
+\begin{longtable}{|p{1.05cm}|p{2.15cm}|p{3.35cm}|p{1.75cm}|p{0.95cm}|p{4.05cm}|}
+\caption{Wymagania funkcjonalne -- zarządzanie użytkownikami}\\\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Nazwa} & \textbf{Opis} & \textbf{Aktor} & \textbf{Priorytet} & \textbf{Źródło i kryterium akceptacji}\\\hline
+\endfirsthead
+\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Nazwa} & \textbf{Opis} & \textbf{Aktor} & \textbf{Priorytet} & \textbf{Źródło i kryterium akceptacji}\\\hline
+\endhead
+WF-001 & Rejestracja pasażera & System musi umożliwiać utworzenie konta pasażera na podstawie wymaganych danych. & Pasażer & Wysoki & \textbf{Źródło:} HU-01; UC1\par\textbf{Akceptacja:} Po podaniu poprawnych wymaganych danych system tworzy konto i nadaje mu unikalny identyfikator; duplikat adresu e-mail jest odrzucany.\\\hline
+WF-002 & Logowanie & System musi uwierzytelnić użytkownika na podstawie danych logowania i udostępnić funkcje zgodne z jego rolą. & Wszyscy użytkownicy wewnętrzni i pasażer & Wysoki & \textbf{Źródło:} HU-02; UC2\par\textbf{Akceptacja:} Poprawne dane umożliwiają rozpoczęcie sesji, a błędne dane nie dają dostępu do funkcji chronionych.\\\hline
+WF-003 & Wylogowanie & System musi umożliwiać bezpieczne zakończenie aktywnej sesji użytkownika. & Wszyscy użytkownicy wewnętrzni i pasażer & Wysoki & \textbf{Źródło:} UC56\par\textbf{Akceptacja:} Po wylogowaniu token lub sesja przestaje uprawniać do dostępu do funkcji wymagających zalogowania.\\\hline
+WF-004 & Zarządzanie własnym kontem & System musi umożliwiać użytkownikowi przeglądanie i aktualizowanie własnych danych w zakresie przyznanych uprawnień. & Pasażer, pracownik & Średni & \textbf{Źródło:} UC57\par\textbf{Akceptacja:} Użytkownik może odczytać i zmienić dozwolone dane własnego konta, ale nie może modyfikować danych innego użytkownika.\\\hline
+WF-005 & Zarządzanie rolami & System musi umożliwiać administratorowi przypisywanie i modyfikowanie ról użytkowników. & Administrator systemu & Wysoki & \textbf{Źródło:} HU-28; UC49\par\textbf{Akceptacja:} Administrator może przypisać lub zmienić rolę, a system zapisuje zmianę i egzekwuje wynikające z niej uprawnienia.\\\hline
+WF-063 & Zarządzanie użytkownikami & System musi umożliwiać administratorowi tworzenie, przeglądanie, edytowanie i dezaktywowanie kont użytkowników. & Administrator systemu & Wysoki & \textbf{Źródło:} HU-28; UC48\par\textbf{Akceptacja:} Administrator może utworzyć, zmienić lub dezaktywować konto; system blokuje powtórzenie unikalnego identyfikatora logowania.\\\hline
+\end{longtable}
+\normalsize
+
+\section{Portal pasażera i rezerwacje}
+\small
+\begin{longtable}{|p{1.05cm}|p{2.15cm}|p{3.35cm}|p{1.75cm}|p{0.95cm}|p{4.05cm}|}
+\caption{Wymagania funkcjonalne -- portal pasażera i rezerwacje}\\\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Nazwa} & \textbf{Opis} & \textbf{Aktor} & \textbf{Priorytet} & \textbf{Źródło i kryterium akceptacji}\\\hline
+\endfirsthead
+\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Nazwa} & \textbf{Opis} & \textbf{Aktor} & \textbf{Priorytet} & \textbf{Źródło i kryterium akceptacji}\\\hline
+\endhead
+WF-006 & Wyszukiwanie lotów & System musi umożliwiać wyszukiwanie lotów według lotniska wylotu, lotniska docelowego i daty. & Pasażer & Wysoki & \textbf{Źródło:} HU-03; UC3\par\textbf{Akceptacja:} Dla poprawnych kryteriów system zwraca pasujące loty, a dla braku wyników wyświetla czytelny komunikat.\\\hline
+WF-007 & Szczegóły lotu & System musi prezentować szczegółowe informacje dotyczące wybranego lotu. & Pasażer & Wysoki & \textbf{Źródło:} HU-03; UC3\par\textbf{Akceptacja:} Wybrany lot prezentuje co najmniej numer, trasę, datę, planowane godziny i aktualny status.\\\hline
+WF-008 & Tworzenie rezerwacji & System musi umożliwiać utworzenie rezerwacji dla wybranego lotu, jeżeli dostępne są miejsca. & Pasażer & Wysoki & \textbf{Źródło:} HU-05; PU-01; UC5\par\textbf{Akceptacja:} Po zatwierdzeniu poprawnych danych system tworzy rezerwację z unikalnym numerem i statusem oczekującym na płatność.\\\hline
+WF-009 & Wybór miejsca & System powinien umożliwiać pasażerowi wybór dostępnego miejsca w samolocie lub przydzielić miejsce automatycznie, jeśli wybór nie jest dostępny. & Pasażer & Średni & \textbf{Źródło:} HU-07; PU-02; UC11\par\textbf{Akceptacja:} System prezentuje dostępne miejsca i nie pozwala przypisać miejsca zajętego; przy automatycznym przydziale zapisuje wybrane miejsce.\\\hline
+WF-010 & Anulowanie rezerwacji & System musi umożliwiać anulowanie rezerwacji zgodnie z obowiązującymi zasadami. & Pasażer, uprawniony pracownik & Średni & \textbf{Źródło:} HU-06; UC9\par\textbf{Akceptacja:} Uprawniony użytkownik może anulować rezerwację spełniającą warunki anulowania, a jej status zostaje zmieniony na anulowany.\\\hline
+WF-011 & Weryfikacja miejsc & System musi sprawdzać dostępność miejsc przed zatwierdzeniem rezerwacji i zapobiegać podwójnemu przydziałowi. & System & Wysoki & \textbf{Źródło:} HU-05; PU-01; UC5\par\textbf{Akceptacja:} Dwie równoczesne próby rezerwacji tego samego miejsca nie mogą zakończyć się jego przypisaniem do dwóch aktywnych rezerwacji.\\\hline
+WF-051 & Zgłaszanie bagażu & System musi umożliwiać pasażerowi zgłoszenie bagażu powiązanego z jego rezerwacją. & Pasażer & Średni & \textbf{Źródło:} HU-09; UC14\par\textbf{Akceptacja:} Pasażer może zgłosić bagaż do własnej rezerwacji, a system zapisuje zgłoszenie i udostępnia je uprawnionym pracownikom.\\\hline
+WF-052 & Zamawianie usług dodatkowych & System musi umożliwiać pasażerowi przeglądanie dostępnych usług dodatkowych i składanie zamówień powiązanych z rezerwacją. & Pasażer & Średni & \textbf{Źródło:} HU-09; UC15\par\textbf{Akceptacja:} Pasażer może wybrać dostępną usługę i przypisać ją do rezerwacji, a system zapisuje zamówienie i jego status.\\\hline
+WF-053 & Składanie reklamacji & System musi umożliwiać pasażerowi złożenie reklamacji dotyczącej obsługi lotniska, lotu, rezerwacji lub bagażu. & Pasażer; pracownik administracji & Średni & \textbf{Źródło:} HU-09; UC16\par\textbf{Akceptacja:} Pasażer może przesłać reklamację z wymaganymi informacjami, a system nadaje jej identyfikator i zapisuje ją w rejestrze.\\\hline
+WF-054 & Zarządzanie rezerwacją & System musi umożliwiać pasażerowi przeglądanie szczegółów własnej rezerwacji i wykonywanie dostępnych operacji związanych z jej obsługą. & Pasażer & Wysoki & \textbf{Źródło:} HU-06; UC8\par\textbf{Akceptacja:} Pasażer może wyświetlić szczegóły własnej rezerwacji, a system odmawia dostępu do rezerwacji innych użytkowników.\\\hline
+\end{longtable}
+\normalsize
+
+\section{Obsługa płatności}
+\small
+\begin{longtable}{|p{1.05cm}|p{2.15cm}|p{3.35cm}|p{1.75cm}|p{0.95cm}|p{4.05cm}|}
+\caption{Wymagania funkcjonalne -- obsługa płatności}\\\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Nazwa} & \textbf{Opis} & \textbf{Aktor} & \textbf{Priorytet} & \textbf{Źródło i kryterium akceptacji}\\\hline
+\endfirsthead
+\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Nazwa} & \textbf{Opis} & \textbf{Aktor} & \textbf{Priorytet} & \textbf{Źródło i kryterium akceptacji}\\\hline
+\endhead
+WF-012 & Inicjowanie płatności & System musi umożliwiać rozpoczęcie płatności za utworzoną rezerwację. & Pasażer, system płatności & Wysoki & \textbf{Źródło:} HU-05; PU-01; UC6–UC7\par\textbf{Akceptacja:} Dla rezerwacji oczekującej na płatność system tworzy żądanie płatności z prawidłową kwotą i identyfikatorem rezerwacji.\\\hline
+WF-013 & Weryfikacja płatności & System musi odbierać i przetwarzać informację o wyniku transakcji z zewnętrznego systemu płatności. & Zewnętrzny system płatności & Wysoki & \textbf{Źródło:} HU-05; PU-01; UC7\par\textbf{Akceptacja:} Potwierdzenie i odrzucenie płatności są prawidłowo rozpoznawane, a komunikat z nieznanym identyfikatorem nie zmienia rezerwacji.\\\hline
+WF-014 & Rejestrowanie transakcji & System musi zapisywać informacje o statusie, kwocie, dacie i identyfikatorze transakcji. & System & Wysoki & \textbf{Źródło:} HU-05; PU-01; UC6–UC7\par\textbf{Akceptacja:} Każda rozpoczęta transakcja ma zapisany identyfikator i status, a wynik płatności aktualizuje jej zapis.\\\hline
+\end{longtable}
+\normalsize
+
+\section{Odprawa pasażerów}
+\small
+\begin{longtable}{|p{1.05cm}|p{2.15cm}|p{3.35cm}|p{1.75cm}|p{0.95cm}|p{4.05cm}|}
+\caption{Wymagania funkcjonalne -- odprawa pasażerów}\\\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Nazwa} & \textbf{Opis} & \textbf{Aktor} & \textbf{Priorytet} & \textbf{Źródło i kryterium akceptacji}\\\hline
+\endfirsthead
+\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Nazwa} & \textbf{Opis} & \textbf{Aktor} & \textbf{Priorytet} & \textbf{Źródło i kryterium akceptacji}\\\hline
+\endhead
+WF-015 & Odprawa online & System musi umożliwiać pasażerowi przeprowadzenie odprawy online dla kwalifikującej się rezerwacji. & Pasażer & Wysoki & \textbf{Źródło:} HU-07; PU-02; UC10\par\textbf{Akceptacja:} Pasażer z opłaconą i kwalifikującą się rezerwacją może zakończyć odprawę, a system zapisuje jej status.\\\hline
+WF-016 & Odprawa stanowiskowa & System musi umożliwiać pracownikowi odprawy przeprowadzenie odprawy pasażera na stanowisku. & Pracownik odprawy & Wysoki & \textbf{Źródło:} HU-15; PU-03; UC27\par\textbf{Akceptacja:} Pracownik może odnaleźć rezerwację, zweryfikować pasażera i zarejestrować wynik odprawy.\\\hline
+WF-017 & Generowanie karty pokładowej & System musi generować kartę pokładową po poprawnym zakończeniu odprawy. & System & Wysoki & \textbf{Źródło:} HU-07; HU-08; PU-02; UC12\par\textbf{Akceptacja:} Karta pokładowa jest generowana wyłącznie dla poprawnej rezerwacji z zakończoną odprawą i zawiera dane identyfikujące lot oraz pasażera.\\\hline
+WF-018 & Weryfikacja pasażera & System musi umożliwiać sprawdzenie danych pasażera i jego rezerwacji podczas odprawy. & Pracownik odprawy & Wysoki & \textbf{Źródło:} HU-15; PU-03; UC27\par\textbf{Akceptacja:} Pracownik otrzymuje wynik weryfikacji zgodności danych pasażera z rezerwacją.\\\hline
+WF-055 & Pobieranie karty pokładowej & System musi umożliwiać pasażerowi pobranie wygenerowanej karty pokładowej w udostępnionym formacie, np. PDF z kodem QR. & Pasażer & Wysoki & \textbf{Źródło:} HU-08; UC13\par\textbf{Akceptacja:} Pasażer z zakończoną odprawą może pobrać kartę, natomiast karta dla rezerwacji bez odprawy nie jest udostępniana.\\\hline
+\end{longtable}
+\normalsize
+
+\section{Zarządzanie lotami i zasobami lotniczymi}
+\small
+\begin{longtable}{|p{1.05cm}|p{2.15cm}|p{3.35cm}|p{1.75cm}|p{0.95cm}|p{4.05cm}|}
+\caption{Wymagania funkcjonalne -- zarządzanie lotami i zasobami lotniczymi}\\\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Nazwa} & \textbf{Opis} & \textbf{Aktor} & \textbf{Priorytet} & \textbf{Źródło i kryterium akceptacji}\\\hline
+\endfirsthead
+\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Nazwa} & \textbf{Opis} & \textbf{Aktor} & \textbf{Priorytet} & \textbf{Źródło i kryterium akceptacji}\\\hline
+\endhead
+WF-019 & Dodawanie lotu & System musi umożliwiać uprawnionemu kontrolerowi ruchu lotniczego utworzenie nowego lotu. & Kontroler ruchu lotniczego & Wysoki & \textbf{Źródło:} HU-10; UC17–UC18\par\textbf{Akceptacja:} Po podaniu wymaganych danych uprawniony użytkownik może zapisać nowy lot, któremu system nadaje unikalny identyfikator.\\\hline
+WF-020 & Edycja lotu & System musi umożliwiać uprawnionemu kontrolerowi ruchu lotniczego aktualizację informacji dotyczących zaplanowanego lotu. & Kontroler ruchu lotniczego & Wysoki & \textbf{Źródło:} HU-10; UC17–UC18\par\textbf{Akceptacja:} Zmiana danych lotu jest zapisywana, a system sprawdza poprawność danych i konflikty zasobów.\\\hline
+WF-021 & Aktualizacja statusu lotu & System musi umożliwiać uprawnionemu użytkownikowi zmianę statusu lotu. & Kontroler ruchu lotniczego & Wysoki & \textbf{Źródło:} HU-04; HU-12; HU-13; PU-04; UC4, UC24–UC25\par\textbf{Akceptacja:} Zmiana statusu jest zapisywana z datą i użytkownikiem, a nowy status jest widoczny dla uprawnionych odbiorców.\\\hline
+WF-022 & Przypisywanie samolotu & System musi umożliwiać przypisanie samolotu do lotu po sprawdzeniu dostępności. & Kontroler ruchu lotniczego & Wysoki & \textbf{Źródło:} HU-11; UC19\par\textbf{Akceptacja:} System umożliwia przypisanie dostępnego samolotu i blokuje przypisanie powodujące konflikt czasowy.\\\hline
+WF-023 & Harmonogram lotów & System musi prezentować harmonogram przylotów i odlotów odpowiednio do uprawnień użytkownika. & Pasażer, kontroler ruchu lotniczego & Wysoki & \textbf{Źródło:} HU-04; HU-10; HU-12; UC4, UC17\par\textbf{Akceptacja:} Użytkownik może wyświetlić loty według daty i kierunku wraz z aktualnym statusem oraz planowanymi godzinami.\\\hline
+WF-024 & Wykrywanie konfliktów & System musi wykrywać konflikty czasowe i zasobowe podczas planowania operacji lotniczych. & System & Wysoki & \textbf{Źródło:} HU-11; UC19–UC21\par\textbf{Akceptacja:} Próba przypisania zajętego zasobu w kolidującym przedziale czasu jest odrzucana z informacją o konflikcie.\\\hline
+WF-040 & Zarządzanie liniami lotniczymi & System musi umożliwiać uprawnionemu kontrolerowi przeglądanie, dodawanie i aktualizowanie danych linii lotniczych obsługujących lotnisko. & Kontroler ruchu lotniczego & Średni & \textbf{Źródło:} HU-14; UC26\par\textbf{Akceptacja:} Uprawniony użytkownik może dodać linię lotniczą i zmienić jej dane, a system zapisuje aktualne informacje.\\\hline
+WF-056 & Przydzielanie pasa startowego & System musi umożliwiać kontrolerowi przypisanie dostępnego pasa startowego do operacji lotniczej z uwzględnieniem harmonogramu. & Kontroler ruchu lotniczego & Wysoki & \textbf{Źródło:} HU-11; UC20\par\textbf{Akceptacja:} Kontroler może przypisać dostępny pas, a system blokuje przypisanie powodujące konflikt z inną operacją.\\\hline
+WF-057 & Przydzielanie stanowiska postojowego & System musi umożliwiać kontrolerowi przypisanie stanowiska postojowego do samolotu z uwzględnieniem dostępności. & Kontroler ruchu lotniczego & Wysoki & \textbf{Źródło:} HU-11; UC21\par\textbf{Akceptacja:} System umożliwia przypisanie wolnego stanowiska i uniemożliwia przypisanie go do dwóch operacji w nakładającym się czasie.\\\hline
+WF-058 & Monitorowanie ruchu lotniczego & System musi umożliwiać kontrolerowi przeglądanie informacji o zaplanowanych i realizowanych operacjach lotniczych oraz ich statusach. & Kontroler ruchu lotniczego & Wysoki & \textbf{Źródło:} HU-12; UC22\par\textbf{Akceptacja:} Kontroler może wyświetlić listę lotów wraz z aktualnymi statusami, godzinami i przypisanymi zasobami.\\\hline
+WF-059 & Zatwierdzanie operacji lotniczych & System musi umożliwiać uprawnionemu kontrolerowi rejestrowanie zatwierdzenia operacji startu lub lądowania w zakresie wspomaganym przez system. & Kontroler ruchu lotniczego & Wysoki & \textbf{Źródło:} HU-12; UC23\par\textbf{Akceptacja:} System zapisuje zatwierdzenie wraz z datą i identyfikatorem kontrolera; zapis nie zastępuje rzeczywistej decyzji służb ATC.\\\hline
+\end{longtable}
+\normalsize
+
+\section{Zarządzanie terminalem i bagażem}
+\small
+\begin{longtable}{|p{1.05cm}|p{2.15cm}|p{3.35cm}|p{1.75cm}|p{0.95cm}|p{4.05cm}|}
+\caption{Wymagania funkcjonalne -- zarządzanie terminalem i bagażem}\\\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Nazwa} & \textbf{Opis} & \textbf{Aktor} & \textbf{Priorytet} & \textbf{Źródło i kryterium akceptacji}\\\hline
+\endfirsthead
+\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Nazwa} & \textbf{Opis} & \textbf{Aktor} & \textbf{Priorytet} & \textbf{Źródło i kryterium akceptacji}\\\hline
+\endhead
+WF-025 & Zarządzanie bramkami & System musi umożliwiać przypisywanie i zmianę bramek dla lotów. & Pracownik terminala & Wysoki & \textbf{Źródło:} HU-17; UC30–UC31\par\textbf{Akceptacja:} Pracownik może przypisać wolną bramkę do lotu, a system blokuje kolidujące przypisania.\\\hline
+WF-026 & Zarządzanie stanowiskami odprawy & System musi umożliwiać przydzielanie stanowisk odprawy do obsługiwanych lotów. & Pracownik terminala & Średni & \textbf{Źródło:} HU-17; UC55\par\textbf{Akceptacja:} Pracownik może przypisać dostępne stanowisko do lotu, a system zapisuje przypisanie i wykrywa konflikt czasowy.\\\hline
+WF-027 & Rejestrowanie bagażu & System musi umożliwiać rejestrowanie bagażu przypisanego do pasażera i jego rezerwacji. & Pracownik odprawy & Wysoki & \textbf{Źródło:} HU-16; PU-03; UC28\par\textbf{Akceptacja:} Każdy przyjęty bagaż otrzymuje unikalny identyfikator powiązany z pasażerem i lotem.\\\hline
+WF-028 & Status bagażu & System musi umożliwiać aktualizowanie i przeglądanie statusu bagażu na kolejnych etapach obsługi. & Pracownik obsługi naziemnej & Średni & \textbf{Źródło:} HU-19; UC34\par\textbf{Akceptacja:} Uprawniony pracownik może odczytać aktualny status bagażu i zarejestrować dozwoloną zmianę statusu.\\\hline
+WF-029 & Wejście na pokład & System musi umożliwiać weryfikację karty pokładowej podczas wejścia pasażera na pokład. & Pracownik odprawy & Wysoki & \textbf{Źródło:} HU-18; UC32\par\textbf{Akceptacja:} System potwierdza wejście pasażera tylko raz i tylko dla ważnej karty przypisanej do danego lotu.\\\hline
+WF-060 & Drukowanie etykiet bagażowych & System musi umożliwiać generowanie i drukowanie etykiet bagażowych z unikalnym identyfikatorem i powiązaniem z lotem. & Pracownik odprawy & Wysoki & \textbf{Źródło:} HU-16; UC29\par\textbf{Akceptacja:} Dla zarejestrowanego bagażu system generuje etykietę z unikalnym identyfikatorem możliwą do wydrukowania.\\\hline
+WF-061 & Zarządzanie przepływem pasażerów & System musi umożliwiać pracownikowi terminala monitorowanie i wspomaganie organizacji przepływu pasażerów w terminalu. & Pracownik terminala & Średni & \textbf{Źródło:} HU-17; UC33\par\textbf{Akceptacja:} Pracownik może przeglądać informacje o obsługiwanych obszarach i aktualizować dane dotyczące organizacji przepływu.\\\hline
+WF-062 & Obsługa zagubionego bagażu & System musi umożliwiać rejestrowanie zgłoszeń zagubionego bagażu, wyszukiwanie informacji i aktualizowanie statusu zgłoszenia. & Pracownik odprawy & Średni & \textbf{Źródło:} HU-20; UC35\par\textbf{Akceptacja:} Pracownik może zarejestrować zgłoszenie, wyszukać je po identyfikatorze i zmienić jego status.\\\hline
+\end{longtable}
+\normalsize
+
+\section{Obsługa naziemna i personel}
+\small
+\begin{longtable}{|p{1.05cm}|p{2.15cm}|p{3.35cm}|p{1.75cm}|p{0.95cm}|p{4.05cm}|}
+\caption{Wymagania funkcjonalne -- obsługa naziemna i personel}\\\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Nazwa} & \textbf{Opis} & \textbf{Aktor} & \textbf{Priorytet} & \textbf{Źródło i kryterium akceptacji}\\\hline
+\endfirsthead
+\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Nazwa} & \textbf{Opis} & \textbf{Aktor} & \textbf{Priorytet} & \textbf{Źródło i kryterium akceptacji}\\\hline
+\endhead
+WF-030 & Zarządzanie personelem & System musi umożliwiać uprawnionemu pracownikowi administracji dodawanie i aktualizowanie danych pracowników. & Pracownik administracji & Średni & \textbf{Źródło:} HU-23; UC39\par\textbf{Akceptacja:} Uprawniony pracownik może dodać lub zaktualizować dane pracownika, a system waliduje wymagane pola.\\\hline
+WF-031 & Przydzielanie zadań & System musi umożliwiać uprawnionemu pracownikowi administracji przydzielanie zadań pracownikom obsługi naziemnej. & Pracownik administracji & Wysoki & \textbf{Źródło:} HU-23; UC40\par\textbf{Akceptacja:} Zadanie może zostać przypisane aktywnemu pracownikowi, a przypisanie zawiera termin, opis i status.\\\hline
+WF-032 & Aktualizacja statusu zadania & System musi umożliwiać pracownikowi obsługi naziemnej aktualizowanie statusu przypisanego zadania. & Pracownik obsługi naziemnej & Wysoki & \textbf{Źródło:} HU-23; UC40\par\textbf{Akceptacja:} Pracownik może zmienić status własnego zadania na dozwolony kolejny status, a system zapisuje zmianę.\\\hline
+WF-033 & Przeglądanie zadań & System musi umożliwiać pracownikowi przeglądanie listy przypisanych mu zadań. & Pracownik obsługi naziemnej & Średni & \textbf{Źródło:} HU-23; UC40\par\textbf{Akceptacja:} Zalogowany pracownik widzi zadania przypisane do siebie wraz z terminem, opisem i statusem.\\\hline
+WF-034 & Rejestrowanie usterek & System musi umożliwiać zgłaszanie usterek infrastruktury i wyposażenia lotniskowego. & Pracownik techniczny & Średni & \textbf{Źródło:} HU-24; UC42\par\textbf{Akceptacja:} Zgłoszenie usterki otrzymuje identyfikator i zawiera opis, lokalizację, datę oraz status.\\\hline
+WF-041 & Przygotowanie samolotu do lotu & System musi umożliwiać pracownikowi obsługi naziemnej przeglądanie i realizowanie czynności związanych z przygotowaniem samolotu do kolejnego lotu. & Pracownik obsługi naziemnej & Wysoki & \textbf{Źródło:} HU-21; UC36\par\textbf{Akceptacja:} Pracownik może wyświetlić listę czynności przygotowawczych, aktualizować ich statusy i oznaczyć zakończenie przygotowania.\\\hline
+WF-042 & Obsługa samolotu po lądowaniu & System musi umożliwiać pracownikowi obsługi naziemnej rejestrowanie i koordynowanie czynności wykonywanych po lądowaniu samolotu. & Pracownik obsługi naziemnej & Wysoki & \textbf{Źródło:} HU-21; UC37\par\textbf{Akceptacja:} Pracownik może zarejestrować rozpoczęcie i zakończenie czynności obsługi samolotu po lądowaniu.\\\hline
+WF-043 & Załadunek i rozładunek bagażu & System musi umożliwiać pracownikowi obsługi naziemnej rejestrowanie czynności związanych z załadunkiem i rozładunkiem bagażu przypisanego do lotu. & Pracownik obsługi naziemnej & Wysoki & \textbf{Źródło:} HU-22; UC38\par\textbf{Akceptacja:} Pracownik może zarejestrować rozpoczęcie i zakończenie załadunku lub rozładunku, a system aktualizuje status obsługi bagażu.\\\hline
+WF-044 & Planowanie sprzątania & System musi umożliwiać pracownikowi technicznemu planowanie czynności sprzątania obszarów lotniska i aktualizowanie ich statusu. & Pracownik techniczny & Średni & \textbf{Źródło:} HU-25; UC41\par\textbf{Akceptacja:} Pracownik może utworzyć zadanie sprzątania, wskazać obszar i termin oraz zaktualizować status realizacji.\\\hline
+WF-045 & Przeprowadzanie przeglądów technicznych & System musi umożliwiać pracownikowi technicznemu rejestrowanie przeglądów infrastruktury i wyposażenia oraz zapisywanie ich wyników. & Pracownik techniczny & Średni & \textbf{Źródło:} HU-24; UC43\par\textbf{Akceptacja:} Pracownik może utworzyć wpis przeglądu, określić wynik i zapisać informacje o wykrytych nieprawidłowościach.\\\hline
+WF-046 & Zarządzanie wyposażeniem & System musi umożliwiać pracownikowi technicznemu przeglądanie i aktualizowanie informacji o wyposażeniu lotniska, w tym jego lokalizacji i statusie technicznym. & Pracownik techniczny & Średni & \textbf{Źródło:} HU-25; UC44\par\textbf{Akceptacja:} Pracownik może wyszukać element wyposażenia, wyświetlić jego dane i zaktualizować status lub lokalizację.\\\hline
+\end{longtable}
+\normalsize
+
+\section{Bezpieczeństwo i administracja}
+\small
+\begin{longtable}{|p{1.05cm}|p{2.15cm}|p{3.35cm}|p{1.75cm}|p{0.95cm}|p{4.05cm}|}
+\caption{Wymagania funkcjonalne -- bezpieczeństwo i administracja}\\\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Nazwa} & \textbf{Opis} & \textbf{Aktor} & \textbf{Priorytet} & \textbf{Źródło i kryterium akceptacji}\\\hline
+\endfirsthead
+\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Nazwa} & \textbf{Opis} & \textbf{Aktor} & \textbf{Priorytet} & \textbf{Źródło i kryterium akceptacji}\\\hline
+\endhead
+WF-035 & Kontrola dostępu & System musi weryfikować uprawnienia użytkownika przed wykonaniem operacji chronionej, zgodnie z przypisaną mu rolą. & System & Wysoki & \textbf{Źródło:} HU-28; UC49\par\textbf{Akceptacja:} Użytkownik bez wymaganej roli nie może wykonać operacji chronionej, a próba jest odnotowana.\\\hline
+WF-036 & Rejestrowanie zdarzeń & System musi zapisywać istotne zdarzenia dotyczące bezpieczeństwa, operacji i działania systemu. & System & Wysoki & \textbf{Źródło:} HU-31; UC53\par\textbf{Akceptacja:} Dla wskazanych zdarzeń powstaje wpis zawierający co najmniej czas, rodzaj zdarzenia i identyfikator użytkownika lub procesu.\\\hline
+WF-037 & Obsługa incydentów & System musi umożliwiać pracownikowi bezpieczeństwa i ratownictwa rejestrowanie, przeglądanie i aktualizowanie zgłoszeń dotyczących incydentów. & Pracownik bezpieczeństwa i ratownictwa & Średni & \textbf{Źródło:} HU-27; PU-05; UC46–UC47\par\textbf{Akceptacja:} Pracownik może utworzyć incydent, nadać mu status i uzupełnić opis; system zapisuje historię zmian.\\\hline
+WF-038 & Generowanie raportów & System musi umożliwiać generowanie raportów dotyczących lotów, rezerwacji i operacji lotniskowych. & Pracownik administracji & Średni & \textbf{Źródło:} HU-30; UC52\par\textbf{Akceptacja:} Użytkownik może wybrać dostępny typ raportu i zakres dat, a system generuje zestawienie zgodne z filtrami.\\\hline
+WF-039 & Przeglądanie dziennika zdarzeń & System musi umożliwiać administratorowi przeglądanie zarejestrowanych zdarzeń systemowych i operacyjnych oraz filtrowanie ich. & Administrator systemu & Średni & \textbf{Źródło:} HU-31; UC53\par\textbf{Akceptacja:} Administrator może filtrować wpisy według daty, rodzaju zdarzenia i użytkownika oraz otworzyć szczegóły wpisu.\\\hline
+WF-047 & Monitorowanie bezpieczeństwa lotniska & System musi umożliwiać pracownikowi bezpieczeństwa przeglądanie informacji o zdarzeniach i zgłoszeniach dotyczących bezpieczeństwa lotniska. & Pracownik bezpieczeństwa i ratownictwa & Wysoki & \textbf{Źródło:} HU-26; PU-05; UC45\par\textbf{Akceptacja:} Pracownik może wyświetlić listę zdarzeń, filtrować je według statusu lub kategorii i przejść do szczegółów.\\\hline
+WF-048 & Zarządzanie konfiguracją systemu & System musi umożliwiać administratorowi przeglądanie i modyfikowanie ustawień konfiguracyjnych zgodnie z uprawnieniami. & Administrator systemu & Wysoki & \textbf{Źródło:} HU-29; UC50\par\textbf{Akceptacja:} Administrator może zmienić dozwolone ustawienia, a system zapisuje zmianę i identyfikator wykonującego ją użytkownika.\\\hline
+WF-049 & Zarządzanie finansami i rozliczeniami & System musi umożliwiać pracownikowi administracji przeglądanie i analizowanie danych dotyczących płatności, przychodów i rozliczeń. & Pracownik administracji & Średni & \textbf{Źródło:} HU-30; UC51\par\textbf{Akceptacja:} Pracownik może wyświetlić zestawienie transakcji i danych rozliczeniowych za wybrany okres.\\\hline
+WF-050 & Wysyłanie powiadomień & System musi przekazywać komunikaty do zewnętrznego systemu powiadomień w celu informowania odbiorców o istotnych zmianach. & System obsługi lotniska; zewnętrzny system powiadomień & Wysoki & \textbf{Źródło:} HU-13; HU-31; PU-04; UC54\par\textbf{Akceptacja:} System przekazuje komunikat do usługi zewnętrznej, a przy błędzie zapisuje niepowodzenie i umożliwia ponowienie.\\\hline
+\end{longtable}
+\normalsize
+
+\noindent Wymagania WF-001--WF-063 stanowią łącznie specyfikację funkcjonalną pięciu modułów systemu. Powiązania źródłowe wskazują historie użytkowników (HU), szczegółowe przypadki użycia (PU) i przypadki użycia diagramu UML (UC). Wymagania mogą realizować więcej niż jeden przypadek użycia, jeżeli opisują wspólny mechanizm systemowy.
+
+% ================= 4. WYMAGANIA NIEFUNKCJONALNE =================
+\chapter{Wymagania niefunkcjonalne}
+
+Wymagania niefunkcjonalne określają właściwości jakościowe systemu i warunki jego działania. Ich kategorie przyjęto z uwzględnieniem modelu jakości ISO/IEC 25010 \cite{iso25010}. Podane wartości liczbowe stanowią projektowe cele jakościowe i powinny zostać zweryfikowane podczas testów.
+
+\section{Wydajność i efektywność}
+\begin{longtable}{|p{1.5cm}|p{8.4cm}|p{3.5cm}|}
+\caption{Wymagania niefunkcjonalne -- wydajność}\label{tab:wnf-wydajnosc}\\\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Wymaganie} & \textbf{Kryterium weryfikacji}\\\hline
+WNF-001 & System musi obsługiwać co najmniej 100 jednoczesnych aktywnych sesji użytkowników. & Test obciążeniowy z 100 sesjami; w trakcie testu system nie może utracić zapisanych danych.\\\hline
+WNF-002 & Czas odpowiedzi standardowych operacji odczytu nie powinien przekraczać 2 sekund przy obciążeniu do 100 aktywnych sesji. & Pomiar czasu odpowiedzi dla zdefiniowanego zestawu operacji; 95\% odpowiedzi nie przekracza 2 sekund.\\\hline
+WNF-003 & Operacje zapisu i aktualizacji danych powinny kończyć się w czasie do 3 sekund, z wyłączeniem czasu odpowiedzi systemów zewnętrznych. & Test wydajności zapisu; 95\% operacji zapisu kończy się w czasie do 3 sekund, bez czasu usług zewnętrznych.\\\hline
+WNF-004 & System musi zapewniać spójność danych podczas równoczesnej obsługi operacji wykonywanych przez wielu użytkowników. & Test współbieżności, w tym równoczesnej rezerwacji tego samego miejsca; brak sprzecznych lub zdublowanych zapisów.\\\hline
+\end{longtable}
+
+\section{Bezpieczeństwo}
+\begin{longtable}{|p{1.5cm}|p{8.4cm}|p{3.5cm}|}
+\caption{Wymagania niefunkcjonalne -- bezpieczeństwo}\label{tab:wnf-bezpieczenstwo}\\\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Wymaganie} & \textbf{Kryterium weryfikacji}\\\hline
+WNF-005 & Dostęp do funkcji wymagających autoryzacji musi być poprzedzony uwierzytelnieniem użytkownika. & Test dostępu do każdej grupy funkcji chronionych bez aktywnej sesji; wszystkie próby muszą zostać odrzucone.\\\hline
+WNF-006 & System musi stosować kontrolę dostępu opartą na rolach użytkowników (RBAC). & Test macierzy uprawnień dla wszystkich ról; użytkownik może wykonać wyłącznie operacje przypisane jego roli.\\\hline
+WNF-007 & Hasła użytkowników muszą być przechowywane jako skróty utworzone algorytmem przeznaczonym do haszowania haseł, np. Argon2id, z unikalną solą. & Weryfikacja algorytmu, soli i konfiguracji. \\\hline
+WNF-008 & Komunikacja pomiędzy klientem a serwerem musi być szyfrowana z użyciem HTTPS i TLS w wersji 1.2 lub nowszej. & Test konfiguracji TLS i certyfikatu. \\\hline
+WNF-009 & System musi rejestrować nieudane próby logowania oraz istotne operacje administracyjne. & Weryfikacja dziennika po wykonaniu nieudanego logowania i operacji administracyjnej; wpis zawiera czas, rodzaj zdarzenia i konto.\\\hline
+WNF-010 & System musi przetwarzać dane osobowe zgodnie z zasadami i obowiązkami wynikającymi z RODO. & Przegląd zakresu zbieranych danych, podstaw przetwarzania, uprawnień dostępu, okresów przechowywania i procedur realizacji praw osób.\\\hline
+WNF-011 & System powinien ograniczać liczbę kolejnych nieudanych prób logowania i stosować mechanizmy ochrony przed odgadywaniem haseł. & Po 5 nieudanych próbach logowania z danego konta w ciągu 15 minut system czasowo ogranicza kolejne próby i rejestruje zdarzenie.\\\hline
+\end{longtable}
+
+\section{Niezawodność i dostępność}
+\begin{longtable}{|p{1.5cm}|p{8.4cm}|p{3.5cm}|}
+\caption{Wymagania niefunkcjonalne -- niezawodność}\label{tab:wnf-niezawodnosc}\\\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Wymaganie} & \textbf{Kryterium weryfikacji}\\\hline
+WNF-012 & System powinien zapewniać dostępność na poziomie co najmniej 99\% w miesięcznym okresie pomiarowym, z wyłączeniem zaplanowanych prac serwisowych. & Analiza monitoringu za pełny miesiąc; dostępność obliczana jako czas dostępności podzielony przez czas objęty pomiarem.\\\hline
+WNF-013 & System musi wykonywać kopię zapasową bazy danych co najmniej raz na 24 godziny. & Kontrola harmonogramu oraz znaczników czasu ostatnich poprawnie zakończonych kopii.\\\hline
+WNF-014 & System musi umożliwiać odtworzenie danych z kopii zapasowej w czasie nieprzekraczającym 4 godzin od rozpoczęcia procedury odtwarzania. & Przeprowadzenie testu odtworzenia i pomiar czasu od rozpoczęcia procedury do przywrócenia dostępności danych.\\\hline
+WNF-015 & Błędy komunikacji z systemami zewnętrznymi nie mogą powodować utraty wcześniej zapisanych danych ani wielokrotnego wykonania tej samej transakcji. & Symulacja niedostępności płatności i powiadomień; po przywróceniu połączenia zapisane dane pozostają spójne, a ponowienie nie dubluje transakcji.\\\hline
+\end{longtable}
+
+\section{Użyteczność}
+\begin{longtable}{|p{1.5cm}|p{8.4cm}|p{3.5cm}|}
+\caption{Wymagania niefunkcjonalne -- użyteczność}\label{tab:wnf-uzytecznosc}\\\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Wymaganie} & \textbf{Kryterium weryfikacji}\\\hline
+WNF-016 & Interfejs systemu musi prezentować funkcje i dane odpowiednie do roli zalogowanego użytkownika. & Test interfejsu dla każdej zdefiniowanej roli; niedostępne funkcje nie są prezentowane jako dostępne, a bezpośredni dostęp jest blokowany.\\\hline
+WNF-017 & System musi wyświetlać zrozumiałe komunikaty o powodzeniu operacji, błędach walidacji i problemach technicznych, wraz z informacją o możliwym dalszym działaniu. & Test co najmniej jednego scenariusza powodzenia, błędu walidacji i błędu technicznego; komunikaty wskazują wynik i dalsze działanie.\\\hline
+WNF-018 & Podstawowy proces rezerwacji biletu musi być możliwy do wykonania bez przechodzenia przez niepowiązane moduły systemu. & Test scenariusza pasażera od wyszukania lotu do utworzenia i opłacenia rezerwacji; wszystkie kroki są dostępne w powiązanym procesie.\\\hline
+\end{longtable}
+
+\section{Utrzymywalność}
+\begin{longtable}{|p{1.5cm}|p{8.4cm}|p{3.5cm}|}
+\caption{Wymagania niefunkcjonalne -- utrzymywalność}\label{tab:wnf-utrzymywalnosc}\\\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Wymaganie} & \textbf{Kryterium weryfikacji}\\\hline
+WNF-019 & System powinien posiadać modularną architekturę, w której główne moduły mają określone zakresy odpowiedzialności i interfejsy komunikacji. & Przegląd architektury potwierdza wydzielenie pięciu modułów i opisanie ich odpowiedzialności oraz punktów integracji.\\\hline
+WNF-020 & Kod źródłowy musi być dokumentowany i utrzymywany zgodnie z konwencjami języków programowania oraz standardami przyjętymi w repozytorium projektu. & Przegląd kodu i repozytorium; sprawdzenie obecności instrukcji uruchomienia, opisów konfiguracji oraz stosowania uzgodnionych formatterów lub reguł stylu.\\\hline
+WNF-021 & System musi rejestrować błędy wraz z datą, typem błędu, komponentem i identyfikatorem korelacyjnym; logi nie mogą ujawniać haseł ani pełnych danych płatniczych. & Weryfikacja wpisów po wywołaniu błędów w różnych modułach oraz kontrola, że logi nie zawierają haseł i pełnych danych płatniczych.\\\hline
+\end{longtable}
+
+\section{Przenośność i kompatybilność}
+\begin{longtable}{|p{1.5cm}|p{8.4cm}|p{3.5cm}|}
+\caption{Wymagania niefunkcjonalne -- przenośność}\label{tab:wnf-przenosnosc}\\\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Wymaganie} & \textbf{Kryterium weryfikacji}\\\hline
+WNF-022 & System musi umożliwiać instalację i uruchomienie w docelowym środowisku serwerowym określonym w dokumentacji wdrożeniowej projektu. & Wykonanie instalacji zgodnie z instrukcją wdrożenia na czystym środowisku docelowym i sprawdzenie uruchomienia wszystkich wymaganych usług.\\\hline
+WNF-023 & Interfejs użytkownika musi poprawnie działać w aktualnych stabilnych wersjach przeglądarek Google Chrome, Mozilla Firefox i Microsoft Edge. & Wykonanie podstawowych scenariuszy pasażera i pracownika w trzech wymienionych przeglądarkach; brak błędów blokujących funkcje.\\\hline
+\end{longtable}
+
+\section{Skalowalność}
+\begin{longtable}{|p{1.5cm}|p{8.4cm}|p{3.5cm}|}
+\caption{Wymagania niefunkcjonalne -- skalowalność}\label{tab:wnf-skalowalnosc}\\\hline
+\rowcolor{lightblue}\textbf{ID} & \textbf{Wymaganie} & \textbf{Kryterium weryfikacji}\\\hline
+WNF-024 & Architektura systemu powinna umożliwiać zwiększenie dostępnych zasobów obliczeniowych i obsługiwanej liczby użytkowników bez przebudowy całego rozwiązania. & Przegląd architektury i próba zwiększenia przydzielonych zasobów środowiska; nie wymaga to zmiany logiki głównych modułów.\\\hline
+WNF-025 & System powinien umożliwiać dodawanie kolejnych modułów przez zdefiniowane interfejsy bez naruszania działania istniejących funkcji. & Test integracji przykładowego modułu oraz ponowne uruchomienie testów regresyjnych istniejących modułów.\\\hline
+\end{longtable}
+
+% ================= 5. DODATKI =================
+\chapter{Dodatki}
+
+\section{Podstawowe zależności pomiędzy modułami}
+System składa się z pięciu głównych obszarów funkcjonalnych, które współpracują ze sobą za pośrednictwem wspólnej warstwy danych i mechanizmów komunikacyjnych.
+
+\begin{itemize}
+    \item Portal pasażera korzysta z danych modułu zarządzania lotami.
+    \item Rezerwacje są powiązane z dostępnością miejsc w samolotach.
+    \item Płatności są powiązane z rezerwacjami.
+    \item Odprawa korzysta z informacji o pasażerach, rezerwacjach i lotach.
+    \item Moduł terminala korzysta z harmonogramów lotów.
+    \item Obsługa naziemna korzysta z informacji o lotach, samolotach i przydzielonych zasobach.
+    \item Moduł bezpieczeństwa i administracji nadzoruje dostęp do pozostałych modułów.
+\end{itemize}
+
+\section{Zasady spójności danych}
+\begin{enumerate}
+    \item Każda rezerwacja musi posiadać unikalny identyfikator.
+    \item Każdy lot musi posiadać unikalny identyfikator.
+    \item Pasażer nie może posiadać dwóch aktywnych rezerwacji na to samo miejsce w tym samym locie.
+    \item Jeden zasób nie może być przypisany do dwóch operacji w sposób powodujący konflikt czasowy.
+    \item Zmiana statusu lotu musi być widoczna dla uprawnionych użytkowników.
+    \item Operacje wpływające na dane finansowe i rezerwacje muszą być odpowiednio rejestrowane.
+    \item Każde konto pracownicze musi być przypisane do określonej roli.
+\end{enumerate}
+
+\section{Przykładowe statusy obiektów}
+\textbf{Status lotu:} zaplanowany, odprawa, boarding, wystartował, wylądował, opóźniony, odwołany, zakończony.
+
+\textbf{Status rezerwacji:} oczekująca na płatność, opłacona, potwierdzona, anulowana.
+
+\textbf{Status bagażu:} zarejestrowany, przyjęty do transportu, w transporcie, załadowany, dostarczony, problem z bagażem.
+
+\textbf{Status zadania pracownika:} oczekujące, przydzielone, w realizacji, zakończone, zablokowane.
+
+% ================= 6. INDEKS =================
+\chapter{Indeks wymagań i terminów}
+
+\section{Indeks wymagań funkcjonalnych}
+\begin{longtable}{|p{5cm}|p{8cm}|}
+\caption{Indeks wymagań funkcjonalnych}\label{tab:indeks-wf}\\\hline
+\rowcolor{lightblue}\textbf{Zakres} & \textbf{Identyfikatory}\\\hline
+Zarządzanie użytkownikami & WF-001 -- WF-005, WF-063\\\hline
+Portal pasażera i rezerwacje & WF-006 -- WF-011, WF-051 -- WF-054\\\hline
+Płatności & WF-012 -- WF-014\\\hline
+Odprawa pasażerów & WF-015 -- WF-018, WF-055\\\hline
+Zarządzanie lotami i zasobami lotniczymi & WF-019 -- WF-024, WF-040, WF-056 -- WF-059\\\hline
+Terminal i bagaż & WF-025 -- WF-029, WF-060 -- WF-062\\\hline
+Obsługa naziemna i personel & WF-030 -- WF-034, WF-041 -- WF-046\\\hline
+Bezpieczeństwo i administracja & WF-035 -- WF-039, WF-047 -- WF-050\\\hline
+\end{longtable}
+
+\section{Indeks wymagań niefunkcjonalnych}
+\begin{longtable}{|p{5cm}|p{8cm}|}
+\caption{Indeks wymagań niefunkcjonalnych}\label{tab:indeks-wnf}\\\hline
+\rowcolor{lightblue}\textbf{Kategoria} & \textbf{Identyfikatory}\\\hline
+Wydajność i efektywność & WNF-001 -- WNF-004\\\hline
+Bezpieczeństwo & WNF-005 -- WNF-011\\\hline
+Niezawodność i dostępność & WNF-012 -- WNF-015\\\hline
+Użyteczność & WNF-016 -- WNF-018\\\hline
+Utrzymywalność & WNF-019 -- WNF-021\\\hline
+Przenośność i kompatybilność & WNF-022 -- WNF-023\\\hline
+Skalowalność & WNF-024 -- WNF-025\\\hline
+\end{longtable}
+
+
+\section{Indeks terminów}
+Terminy zestawiono alfabetycznie. Ich definicje są zgodne ze słownikiem pojęć
+przedstawionym w rozdziale pierwszym oraz z terminologią stosowaną w wymaganiach.
+
+\begin{longtable}{|p{4.2cm}|p{9.3cm}|}
+\caption{Alfabetyczny indeks terminów}\label{tab:indeks-terminow}\\\hline
+\rowcolor{lightblue}\textbf{Termin} & \textbf{Opis}\\\hline
+Administrator & Osoba uprawniona do zarządzania użytkownikami, rolami i konfiguracją systemu.\\\hline
+Bagaż & Rzeczy przewożone przez pasażera, rejestrowane i obsługiwane w procesach lotniskowych.\\\hline
+Bramka & Wyznaczone miejsce, przez które pasażerowie wchodzą na pokład samolotu.\\\hline
+Karta pokładowa & Dokument potwierdzający uprawnienie pasażera do wejścia na pokład samolotu.\\\hline
+Odprawa & Proces potwierdzenia obecności pasażera na danym locie i przygotowania go do wejścia na pokład.\\\hline
+Pasażer & Osoba korzystająca z usług lotniska i realizująca podróż lotniczą.\\\hline
+RBAC & Mechanizm kontroli dostępu oparty na rolach przypisanych użytkownikom.\\\hline
+Rezerwacja & Zapis dotyczący miejsca pasażera w wybranym połączeniu lotniczym.\\\hline
+System płatności & Zewnętrzny system obsługujący autoryzację i realizację płatności za usługi.\\\hline
+UML & Unified Modeling Language -- język modelowania systemów.\\\hline
+\end{longtable}
+
+
+% ================= BIBLIOGRAFIA =================
+\begin{thebibliography}{9}
+\addcontentsline{toc}{chapter}{Bibliografia}
+
+\bibitem{iso29148}
+ISO/IEC/IEEE,
+\textit{ISO/IEC/IEEE 29148:2018 -- Systems and software engineering -- Life cycle processes -- Requirements engineering},
+2018.
+
+\bibitem{iso25010}
+ISO/IEC,
+\textit{ISO/IEC 25010:2011 -- Systems and software Quality Requirements and Evaluation (SQuaRE) -- System and software quality models},
+2011.
+
+\bibitem{uml}
+Object Management Group,
+\textit{OMG Unified Modeling Language (OMG UML), Version 2.5.1},
+2017.
+
+\bibitem{owasp}
+OWASP Foundation,
+\textit{Application Security Verification Standard (ASVS)},
+\url{https://owasp.org/www-project-application-security-verification-standard/},
+dostęp: 8 listopada 2026 r.
+
+\bibitem{rodo}
+Parlament Europejski i Rada Unii Europejskiej,
+\textit{Rozporządzenie (UE) 2016/679 z dnia 27 kwietnia 2016 r. (RODO)},
+Dziennik Urzędowy Unii Europejskiej, L 119, 2016.
+
+\end{thebibliography}
+
+\end{document}
