@@ -81,6 +81,7 @@ Historie użytkowników opisują potrzeby poszczególnych aktorów z perspektywy
 \item[\textbf{HU-PAS-08}] Jako pasażer chcę przeglądać i zarządzać swoimi rezerwacjami, aby kontrolować ich status.
 \item[\textbf{HU-PAS-09}] Jako pasażer chcę wykonać odprawę online, aby ograniczyć czas obsługi na lotnisku.
 \item[\textbf{HU-PAS-10}] Jako pasażer chcę pobrać kartę pokładową, aby przedstawić ją podczas wejścia na pokład.
+\item[\textbf{HU-PAS-11}] Jako pasażer chcę złożyć reklamację dotyczącą usług lotniska lub obsługi rezerwacji, aby zgłosić problem i uzyskać odpowiedź.
 \end{enumerate}
 \section{Pracownik odprawy}
 \begin{enumerate}
@@ -202,6 +203,7 @@ WF-09 & Zarządzanie zasobami terminala & System musi umożliwiać przeglądanie
 WF-10 & Obsługa zadań naziemnych i technicznych & System musi umożliwiać przydzielanie i aktualizowanie zadań operacyjnych, rejestrowanie usterek oraz dokumentowanie przeglądów technicznych. & Pracownik obsługi naziemnej, pracownik techniczny & HU-NAZ-02, HU-NAZ-03, HU-NAZ-09, HU-NAZ-10, HU-TEC-03, HU-TEC-04, HU-TEC-06, HU-TEC-07\\\hline
 WF-11 & Obsługa incydentów bezpieczeństwa & System musi umożliwiać rejestrowanie incydentów, przypisywanie kategorii i osób odpowiedzialnych, aktualizowanie statusów oraz przeglądanie historii obsługi. & Pracownik bezpieczeństwa & HU-BEZ-02, HU-BEZ-03, HU-BEZ-04, HU-BEZ-05, HU-BEZ-06, HU-BEZ-07, HU-BEZ-10\\\hline
 WF-12 & Raportowanie i administracja systemem & System musi umożliwiać generowanie raportów operacyjnych i administracyjnych oraz zarządzanie kontami, rolami i uprawnieniami użytkowników. & Pracownik administracji, administrator systemu & HU-ADM-03, HU-ADM-05, HU-ADM-10, HU-SYS-02, HU-SYS-03, HU-SYS-04, HU-SYS-05, HU-SYS-06, HU-SYS-07\\\hline
+WF-13 & Obsługa reklamacji & System musi umożliwiać pasażerowi złożenie reklamacji, a uprawnionemu pracownikowi administracji jej przeglądanie, rozpatrywanie i aktualizowanie statusu. & Pasażer, pracownik administracji & HU-PAS-11, HU-ADM-06, HU-ADM-07\\\hline
 \end{longtable}
 
 \chapter{Wymagania niefunkcjonalne}
